@@ -1,0 +1,93 @@
+{
+  "builders": [
+    {
+      "type": "vmware-iso",
+      "iso_url": "./iso/en_windows_8.1_enterprise_with_update_x64_dvd_6054382.iso",
+      "iso_checksum_type": "md5",
+      "iso_checksum": "115d7c4203417e52c09d16b50043b10d",
+      "headless": false,
+      "boot_wait": "3m",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_wait_timeout": "15m",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "guest_os_type": "windows8srv-64",
+      "tools_upload_flavor": "windows",
+      "disk_size": 61440,
+      "vnc_port_min": 5900,
+      "vnc_port_max": 5980,
+      "floppy_files": [
+        "./answer_files/81/Autounattend.xml",
+        "./scripts/openssh.ps1",
+        "./answer_files/vs/AdminDeployment.xml"
+      ],
+      "vmx_data": {
+        "RemoteDisplay.vnc.enabled": "false",
+        "RemoteDisplay.vnc.port": "5900",
+        "memsize": "2048",
+        "numvcpus": "2",
+        "scsi0.virtualDev": "lsisas1068",
+        "virtualhw.version": "10",
+        "gui.fitGuestUsingNativeDisplayResolution": "TRUE",
+        "gui.applyHostDisplayScalingToGuest": "FALSE"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "remote_path": "/tmp/script.bat",
+      "execute_command": "{{.Vars}} cmd /c C:/Windows/Temp/script.bat",
+      "scripts": [
+        "./scripts/vm-guest-tools.bat",
+        "./scripts/chef.bat",
+        "./scripts/vagrant-ssh.bat",
+        "./scripts/disable-auto-logon.bat",
+        "./scripts/enable-rdp.bat",
+        "./scripts/NoStupidHelp.bat"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "iso/en_visual_studio_professional_2013_with_update_4_x86_dvd_5935322.iso",
+      "destination": "en_visual_studio_professional_2013_with_update_4_x86_dvd_5935322.iso"
+    },
+    {
+      "type": "file",
+      "source": "./iso/SourceCodePro_FontsOnly-1.017.zip",
+      "destination": "SourceCodePro_FontsOnly-1.017.zip"
+    },
+    {
+        "type": "shell",
+        "remote_path": "/tmp/fonts.ps1",
+        "script": "scripts/fonts.ps1",
+        "execute_command": "powershell -File c:/windows/temp/fonts.ps1"
+    },
+    {
+      "type": "shell",
+      "remote_path": "/tmp/vs2013.ps1",
+      "script": "scripts/vs2013.ps1",
+      "execute_command": "powershell -File c:/windows/temp/vs2013.ps1"
+    },
+    {
+      "type": "shell",
+      "remote_path": "/tmp/script.bat",
+      "execute_command": "{{.Vars}} cmd /c C:/Windows/Temp/script.bat",
+      "scripts": [
+        "./scripts/compile-dotnet-assemblies.bat",
+        "./scripts/compact.bat"
+      ]
+    },
+    {
+        "type": "shell", "inline": ["rm -rf /tmp/*"]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": false,
+      "output": "windows_81-dev_{{.Provider}}.box",
+      "vagrantfile_template": "vagrantfile-windows_81-dev.template"
+    }
+  ]
+}
