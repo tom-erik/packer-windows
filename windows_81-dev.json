@@ -11,7 +11,7 @@
       "iso_url": "./iso/{{user `windows_iso_filename`}}",
       "iso_checksum_type": "md5",
       "iso_checksum": "115d7c4203417e52c09d16b50043b10d",
-      "headless": false,
+      "headless": true,
       "boot_wait": "2m",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
