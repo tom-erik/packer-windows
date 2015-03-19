@@ -3,7 +3,7 @@
   <BundleCustomizations TargetDir="default" NoWeb="yes"/>
 
   <SelectableItemCustomizations>
-    <SelectableItemCustomization Id="Blend" Hidden="no" Selected="yes" />
+    <SelectableItemCustomization Id="Blend" Hidden="no" Selected="no" />
     <SelectableItemCustomization Id="LightSwitch" Hidden="no" Selected="no" />
     <SelectableItemCustomization Id="VC_MFC_Libraries" Hidden="no" Selected="no" />
     <SelectableItemCustomization Id="OfficeDeveloperTools" Hidden="no" Selected="no" />
