@@ -1,12 +1,18 @@
 {
+  "variables": {
+          "windows_iso_filename": "en_windows_8.1_enterprise_with_update_x64_dvd_6054382.iso",
+          "visual_studio_iso_filename" : "en_visual_studio_professional_2013_with_update_4_x86_dvd_5935322.iso",
+          "reshaper_install_filename": "ReSharperSetup.8.2.0.2160.msi",
+          "git_installer_filename": "Git-1.9.5-preview20141217.exe"
+      },
   "builders": [
     {
       "type": "vmware-iso",
-      "iso_url": "./iso/en_windows_8.1_enterprise_with_update_x64_dvd_6054382.iso",
+      "iso_url": "./iso/{{user `windows_iso_filename`}}",
       "iso_checksum_type": "md5",
       "iso_checksum": "115d7c4203417e52c09d16b50043b10d",
       "headless": false,
-      "boot_wait": "3m",
+      "boot_wait": "2m",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_wait_timeout": "15m",
@@ -35,6 +41,11 @@
   ],
   "provisioners": [
     {
+      "type": "file",
+      "source": "iso/windows.iso",
+      "destination": "windows.iso"
+    },
+    {
       "type": "shell",
       "remote_path": "/tmp/script.bat",
       "execute_command": "{{.Vars}} cmd /c C:/Windows/Temp/script.bat",
@@ -49,8 +60,8 @@
     },
     {
       "type": "file",
-      "source": "iso/en_visual_studio_professional_2013_with_update_4_x86_dvd_5935322.iso",
-      "destination": "en_visual_studio_professional_2013_with_update_4_x86_dvd_5935322.iso"
+      "source": "iso/{{user `visual_studio_iso_filename`}}",
+      "destination": "visual_studio.iso"
     },
     {
       "type": "file",
@@ -58,10 +69,47 @@
       "destination": "SourceCodePro_FontsOnly-1.017.zip"
     },
     {
-        "type": "shell",
-        "remote_path": "/tmp/fonts.ps1",
-        "script": "scripts/fonts.ps1",
-        "execute_command": "powershell -File c:/windows/temp/fonts.ps1"
+      "type": "file",
+      "source": "./iso/{{user `git_installer_filename`}}",
+      "destination": "git-setup.exe"
+    },
+    {
+      "type": "file",
+      "source": "./iso/ConEmuSetup.150310.exe",
+      "destination": "ConEmuSetup.150310.exe"
+    },
+    {
+        "type": "file",
+        "source": "./configs/sane.vssettings",
+        "destination": "sane.vssettings"
+    },
+    {
+      "type": "file",
+      "source": "./configs/ConEmu.reg",
+      "destination": "ConEmu.reg"
+    },
+     {
+      "type": "file",
+      "source": "./configs/notepad2",
+      "destination": "/tmp/"
+    },
+    {
+      "type": "shell",
+      "remote_path": "/tmp/fonts.ps1",
+      "script": "scripts/fonts.ps1",
+      "execute_command": "powershell -File c:/windows/temp/fonts.ps1"
+    },
+    {
+      "type": "shell",
+      "remote_path": "/tmp/git.ps1",
+      "script": "scripts/git.ps1",
+      "execute_command": "powershell -File c:/windows/temp/git.ps1"
+    },
+    {
+      "type": "shell",
+      "remote_path": "/tmp/conemu.ps1",
+      "script": "scripts/conemu.ps1",
+      "execute_command": "powershell -File c:/windows/temp/conemu.ps1"
     },
     {
       "type": "shell",

@@ -66,7 +66,7 @@ $destinationInstallPath = "c:\VisualStudio"
 Write-Host "Destination install path for Visual Studio ${destinationInstallPath}"
 
 Write-Host "Installing Visual Studio"
-$isoPath = "C:\users\vagrant\en_visual_studio_professional_2013_with_update_4_x86_dvd_5935322.iso"
+$isoPath = "C:\users\vagrant\visual_studio.iso"
 $rc = Mount-DiskImage -PassThru -ImagePath $isoPath
 $driveLetter = ($rc | Get-Volume).DriveLetter
 Install-VisualStudio -ImagePath "${driveLetter}:" -InstallPath $destinationInstallPath -AdminFile A:\AdminDeployment.xml -Silent $Silent
