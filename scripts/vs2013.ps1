@@ -72,8 +72,8 @@ $driveLetter = ($rc | Get-Volume).DriveLetter
 Install-VisualStudio -ImagePath "${driveLetter}:" -InstallPath $destinationInstallPath -AdminFile A:\AdminDeployment.xml -Silent $Silent
 
 Dismount-DiskImage -ImagePath $isoPath
-#Remove-Item -Force -Path $isoPath
-#Remove-Item -Force -Path c:\VisualStudio_Install*.log
+Remove-Item -Force -Path $isoPath
+Remove-Item -Force -Path c:\VisualStudio_Install*.log
 
 #We register ReSharper in the box VagrantFile instead of here as it's
 # a per user setting which comes from an environment variable.

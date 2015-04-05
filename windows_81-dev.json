@@ -47,6 +47,15 @@
       "scripts": [
         "./scripts/vm-guest-tools.bat",
         "./scripts/vagrant-ssh.bat",
+        "./scripts/reboot.bat"
+      ]
+    },
+    {
+      "type": "shell",
+      "pause_before": "2m",
+      "remote_path": "/tmp/script.bat",
+      "execute_command": "{{.Vars}} cmd /c C:/Windows/Temp/script.bat",
+      "scripts": [
         "./scripts/disable-auto-logon.bat",
         "./scripts/enable-rdp.bat",
         "./scripts/NoStupidHelp.bat"
@@ -112,23 +121,22 @@
       "execute_command": "powershell -File c:/windows/temp/vs2013.ps1"
     },
     {
+        "type": "shell", "inline": ["rm -rf /tmp/*"]
+    },
+    {
       "type": "shell",
       "remote_path": "/tmp/script.bat",
       "execute_command": "{{.Vars}} cmd /c C:/Windows/Temp/script.bat",
       "scripts": [
         "./scripts/notepad2.bat",
-        "./scripts/compile-dotnet-assemblies.bat",
         "./scripts/compact.bat"
       ]
-    },
-    {
-        "type": "shell", "inline": ["rm -rf /tmp/*"]
     }
   ],
   "post-processors": [
     {
       "type": "vagrant",
-      "keep_input_artifact": false,
+      "keep_input_artifact": true,
       "output": "windows_81-dev_{{.Provider}}.box",
       "vagrantfile_template": "vagrantfile-windows_81-dev.template"
     }
